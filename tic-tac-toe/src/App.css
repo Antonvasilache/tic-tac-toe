@@ -1,0 +1,262 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit";
+}
+
+/* DESIGN */
+
+:root {
+  --Light-blue: #31c3bd;
+  --Light-blue-hover: #65e9e4;
+  --Light-yellow: #f2b137;
+  --Light-yellow-hover: #ffc860;
+  --Dark-navy: #1a2a33;
+  --Semi-dark-navy: #1f3641;
+  --Silver: #a8bfc9;
+  --Silver-hover: #dbe8ed;
+}
+
+.heading-l {
+  font-size: 40px;
+  font-weight: bold;
+  letter-spacing: 2.5px;
+}
+
+.heading-m {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.heading-s {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1.25px;
+}
+
+.heading-xs {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.body-m {
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.88px;
+}
+
+/* DESIGN */
+
+/* BUTTONS */
+
+.button {
+  color: var(--Dark-navy);
+  border: none;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.button:active,
+.button:hover {
+  cursor: pointer;
+  background-color: var(--Light-yellow-hover);
+}
+
+.primary-button-1,
+.primary-button-2 {
+  background-color: var(--Light-yellow);
+  box-shadow: 0 8px #cc8b13;
+  max-width: 460px;
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.primary-button-2 {
+  background-color: var(--Light-blue);
+  box-shadow: 0 8px #118c87;
+}
+
+.primary-button-2:active,
+.primary-button-2:hover {
+  background-color: var(--Light-blue-hover);
+}
+
+.secondary-button-1,
+.secondary-button-2 {
+  background-color: var(--Light-yellow);
+  box-shadow: 0 4px #cc8b13;
+  max-width: 226px;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.secondary-button-2 {
+  background-color: var(--Silver);
+  box-shadow: 0 4px #6b8997;
+}
+
+.secondary-button-2:active,
+.secondary-button-2:hover {
+  background-color: var(--Silver-hover);
+}
+
+.restart-button {
+  max-width: 52px;
+  display: flex;
+  height: fit-content;
+}
+
+/* BUTTONS */
+
+.app {
+  background-color: var(--Dark-navy);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.new-game-menu,
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.player-mark {
+  color: var(--Silver);
+  text-transform: uppercase;
+  background-color: var(--Semi-dark-navy);
+  box-shadow: 0 8ch var(--Dark-navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  border-radius: 15px;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.player-mark-select {
+  background-color: var(--Dark-navy);
+  display: flex;
+  border-radius: 10px;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.select-option {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding: 10px;
+}
+
+.select-option .scalable-svg {
+  width: 32px;
+  height: 32px;
+}
+
+.select-option:active,
+.select-option:hover {
+  cursor: pointer;
+  background-color: var(--Semi-dark-navy);
+  border-radius: 10px;
+}
+
+.active,
+.active:active,
+.active:hover {
+  background-color: var(--Silver);
+  border-radius: 10px;
+}
+
+.game-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.game {
+  gap: 19px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo,
+.turn {
+  height: fit-content;
+}
+
+.turn {
+  color: var(--Silver);
+  background-color: var(--Semi-dark-navy);
+  box-shadow: 0 4px var(--Dark-navy);
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 10px;
+  padding: 19px 30px;
+}
+.turn-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.gameboard-item {
+  width: 8.75rem;
+  height: 8.75rem;
+  background-color: var(--Semi-dark-navy);
+  box-shadow: 0 8px #10212a;
+  border-radius: 15px;
+}
+
+.highscore {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.highscore-x,
+.highscore-ties,
+.highscore-o {
+  border-radius: 15px;
+  padding: 12px 41.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.highscore-x {
+  background-color: var(--Light-blue);
+}
+
+.highscore-ties {
+  background-color: var(--Silver);
+}
+
+.highscore-o {
+  background-color: var(--Light-yellow);
+}
