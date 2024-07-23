@@ -111,6 +111,25 @@
 
 /* BUTTONS */
 
+.app-container {
+  position: relative;
+}
+
+.overlay {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: visibility 0.3s ease-in-out;
+  z-index: 1;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
 .app {
   background-color: var(--Dark-navy);
   display: flex;
@@ -179,6 +198,10 @@
   border-radius: 10px;
 }
 
+.active .scalable-svg path {
+  fill: var(--Dark-navy);
+}
+
 .game-type {
   display: flex;
   flex-direction: column;
@@ -225,11 +248,50 @@
 }
 
 .gameboard-item {
+  cursor: pointer;
   width: 8.75rem;
   height: 8.75rem;
   background-color: var(--Semi-dark-navy);
   box-shadow: 0 8px #10212a;
   border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameboard-x-outline,
+.gameboard-o-outline {
+  display: none;
+  pointer-events: none;
+}
+
+.gameboard-item:active .x-active,
+.gameboard-item:hover .x-active {
+  display: block;
+}
+
+.gameboard-item:active .o-active,
+.gameboard-item:hover .o-active {
+  display: block;
+}
+
+.item-disabled-X,
+.item-disabled-O {
+  pointer-events: none;
+  cursor: default;
+}
+
+.item-disabled-X .gameboard-x-outline,
+.item-disabled-O .gameboard-o-outline {
+  display: block;
+}
+
+.item-disabled-X .gameboard-x-outline path {
+  fill: #31c3bd;
+}
+
+.item-disabled-O .gameboard-o-outline path {
+  fill: #f2b137;
 }
 
 .highscore {
@@ -259,4 +321,41 @@
 
 .highscore-o {
   background-color: var(--Light-yellow);
+}
+
+.game-end {
+  background-color: var(--Semi-dark-navy);
+  color: var(--Silver);
+  text-transform: uppercase;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 45px;
+}
+
+.game-end-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.winner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--Light-yellow);
+}
+
+.overlay-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.overlay-button {
+  width: auto;
+}
+
+.hidden {
+  display: none;
 }

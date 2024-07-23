@@ -1,11 +1,16 @@
+import { useGame } from "../context/GameContext";
+
 function PlayerMark() {
-  function handleSelectActive() {}
+  const { dispatch, player1Mark } = useGame();
 
   return (
     <div className="player-mark">
       <p className="heading-xs">Pick player 1&apos;s mark</p>
       <div className="player-mark-select">
-        <div className="select-option" onClick={handleSelectActive}>
+        <div
+          className={`select-option ${player1Mark === "X" ? "active" : ""}`}
+          onClick={() => dispatch({ type: "mark", payload: "X" })}
+        >
           <svg
             viewBox="0 0 64 64"
             xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +23,10 @@ function PlayerMark() {
             />
           </svg>
         </div>
-        <div className="select-option active" onClick={handleSelectActive}>
+        <div
+          className={`select-option ${player1Mark === "O" ? "active" : ""}`}
+          onClick={() => dispatch({ type: "mark", payload: "O" })}
+        >
           <svg
             viewBox="0 0 64 64"
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +34,7 @@ function PlayerMark() {
           >
             <path
               d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z"
-              fill="#1a2a33"
+              fill="#A8BFC9"
             />
           </svg>
         </div>
