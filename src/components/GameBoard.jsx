@@ -1,7 +1,99 @@
+import { useEffect } from "react";
 import { useGame } from "../context/GameContext";
 
 function GameBoard() {
-  const { playerTurn, gameboard, dispatch } = useGame();
+  const {
+    playerTurn,
+    gameboard,
+    dispatch,
+    winner,
+    gameType,
+    player2Mark,
+    initialCpuMove,
+    moveNumber,
+  } = useGame();
+
+  function handleMove(e, index) {
+    //dispatch will add a mark(playerTurn is "X" or "O") to the gameboard array , at the index corresponding to the clicked tile
+    dispatch({ type: "next", payload: { index, playerTurn } });
+    //disabling the clicked tile
+    e.target.classList.add(`item-disabled-${playerTurn}`);
+  }
+
+  function addCpuMove(gameboard) {
+    //creating a variable to use the latest gameboard state
+    let updatedGameboard = [...gameboard];
+
+    //creating an array with the indices of the remaining tiles
+    let remainingTiles = updatedGameboard.reduce((acc, tile, idx) => {
+      if (tile === 0) acc.push(idx);
+
+      return acc;
+    }, []);
+
+    if (remainingTiles.length > 0) {
+      //random index from the remaining tiles array, used to decide the next cpu move
+      const randomIndex = Math.floor(Math.random() * remainingTiles.length);
+      const cpuMove = remainingTiles[randomIndex];
+
+      //dispatch will add a mark to the gameboard array, using cpuMove as index. Player2Mark is "X" or "O"
+      dispatch({ type: "next", payload: { cpuMove, player2Mark } });
+
+      const items = document.querySelectorAll(".gameboard-item");
+      //if there is no winner yet, disable the cpu selected tile
+      if (!winner && items[cpuMove])
+        items[cpuMove].classList.add(`item-disabled-${player2Mark}`);
+    }
+  }
+
+  function resetBoard() {
+    //removing the disabling class on all items every new round
+    const items = document.querySelectorAll(".gameboard-item");
+    items.forEach((item) => {
+      item.classList.remove("item-disabled-X", "item-disabled-O");
+    });
+  }
+
+  useEffect(() => {
+    if (winner) {
+      resetBoard();
+    }
+  }, [winner]);
+
+  //1st CPU move to be made if player 1 selects "O" , game type is vs CPU and there is no winner yet (winner flag resets every round)
+  useEffect(() => {
+    if (
+      !initialCpuMove &&
+      player2Mark === "X" &&
+      gameType === "CPU" &&
+      !winner
+    ) {
+      addCpuMove(gameboard);
+      //dispatch turns initialCpuMove to true, to prevent repeating the move
+      dispatch({ type: "initial-cpu-move" });
+    }
+  }, [winner]);
+
+  //next moves to be made after player 1 makes their move, but not at the start
+  useEffect(() => {
+    if (
+      (gameType === "CPU" &&
+        !winner &&
+        playerTurn === player2Mark &&
+        player2Mark === "O" &&
+        !initialCpuMove &&
+        moveNumber > 0) ||
+      (gameType === "CPU" &&
+        !winner &&
+        playerTurn === player2Mark &&
+        player2Mark === "X" &&
+        initialCpuMove &&
+        moveNumber > 0)
+    )
+      setTimeout(() => {
+        addCpuMove(gameboard);
+      }, 0);
+  }, [playerTurn, winner, gameType, player2Mark, gameboard, initialCpuMove]);
 
   return (
     <div className="gameboard">
@@ -9,10 +101,7 @@ function GameBoard() {
         <div
           className="gameboard-item"
           key={index}
-          onClick={(e) => {
-            dispatch({ type: "next", payload: { index, playerTurn } });
-            e.target.classList.add(`item-disabled-${playerTurn}`);
-          }}
+          onClick={(e) => handleMove(e, index)}
         >
           <svg
             width="64"

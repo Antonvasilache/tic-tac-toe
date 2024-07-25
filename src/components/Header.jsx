@@ -5,8 +5,9 @@ import Turn from "./Turn";
 
 function Header() {
   const { dispatch } = useGame();
-  function handleReset() {
-    dispatch({ type: "reset" });
+
+  function resetPrompt() {
+    dispatch({ type: "reset-prompt" });
   }
 
   return (
@@ -15,7 +16,7 @@ function Header() {
       <Turn />
       <Button
         className="secondary-button-2 restart-button"
-        onClick={handleReset}
+        onClick={resetPrompt}
       >
         <img src="icon-restart.svg" />
       </Button>

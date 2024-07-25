@@ -344,7 +344,6 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  color: var(--Light-yellow);
 }
 
 .overlay-buttons {
@@ -358,4 +357,12 @@
 
 .hidden {
   display: none;
+}
+
+.light-blue {
+  color: var(--Light-blue);
+}
+
+.light-yellow {
+  color: var(--Light-yellow);
 }

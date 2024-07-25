@@ -12,9 +12,15 @@ const initialState = {
   xScore: 0,
   oScore: 0,
   tieScore: 0,
+  winner: null,
+  resetPrompt: false,
+  initialCpuMove: false,
+  moveNumber: 0,
 };
 
+//checks if the current gameboard state matches any of the win conditions for Tic Tac Toe
 function checkWinCondition(gameboard) {
+  //every item is a combination of indices on the gameboard
   const winConditions = [
     [0, 1, 2],
     [0, 3, 6],
@@ -26,6 +32,7 @@ function checkWinCondition(gameboard) {
     [2, 4, 6],
   ];
 
+  //check if any of the current marks on the gameboard match any of the win condtions, and return the winning mark ("X" or "O")
   for (let condition of winConditions) {
     const [a, b, c] = condition;
     if (
@@ -37,6 +44,7 @@ function checkWinCondition(gameboard) {
     }
   }
 
+  //if all gameboard items are filled, and no pattern is matched, the game is a tie
   if (gameboard.every((square) => square !== 0)) return "tie";
 
   return null;
@@ -44,6 +52,7 @@ function checkWinCondition(gameboard) {
 
 function reducer(state, action) {
   switch (action.type) {
+    //selecting player 1's mark
     case "mark":
       return {
         ...state,
@@ -51,6 +60,7 @@ function reducer(state, action) {
         player2Mark: action.payload === "X" ? "O" : "X",
       };
 
+    //starting the game
     case "start":
       return {
         ...state,
@@ -59,6 +69,39 @@ function reducer(state, action) {
         playerTurn: "X",
       };
 
+    //next turn
+    case "next":
+      //generating the updated gameboard (either for player 1, or for CPU, if applicable)
+      const newGameboard = state.gameboard.map(
+        (item, index) =>
+          (item =
+            index === action.payload.index
+              ? action.payload.playerTurn
+              : index === action.payload.cpuMove
+              ? action.payload.player2Mark
+              : item)
+      );
+      //checking and storing win condition after every turn
+      const winResult = checkWinCondition(newGameboard);
+      return {
+        ...state,
+        playerTurn: state.playerTurn === "X" ? "O" : "X",
+        gameboard: newGameboard,
+        xScore: winResult === "X" ? state.xScore + 1 : state.xScore,
+        oScore: winResult === "O" ? state.oScore + 1 : state.oScore,
+        tieScore: winResult === "tie" ? state.tieScore + 1 : state.tieScore,
+        winner: winResult ? winResult : null,
+        moveNumber: state.moveNumber + 1,
+      };
+
+    //showing reset game modal
+    case "reset-prompt":
+      return {
+        ...state,
+        resetPrompt: !state.resetPrompt,
+      };
+
+    //resetting the game
     case "reset":
       return {
         ...initialState,
@@ -66,21 +109,26 @@ function reducer(state, action) {
         player2Mark: state.player2Mark,
       };
 
-    case "next":
-      const newGameboard = state.gameboard.map(
-        (item, index) =>
-          (item =
-            index === action.payload.index ? action.payload.playerTurn : item)
-      );
-      const winResult = checkWinCondition(newGameboard);
+    //starting next round, after a win condition was met
+    case "next-round":
       return {
         ...state,
-        playerTurn: state.playerTurn === "X" ? "O" : "X",
-        gameboard: newGameboard,
-        // status: winResult ? "finished" : state.status,
-        xScore: winResult === "X" ? state.xScore + 1 : state.xScore,
-        oScore: winResult === "Y" ? state.oScore + 1 : state.oScore,
-        tieScore: winResult === "tie" ? state.tieScore + 1 : state.tieScore,
+        playerTurn:
+          state.player1Mark === "O"
+            ? state.playerTurn === "X"
+              ? "O"
+              : "X"
+            : state.player1Mark,
+        gameboard: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        winner: null,
+        initialCpuMove: false,
+      };
+
+    //flagging that cpu made the first move
+    case "initial-cpu-move":
+      return {
+        ...state,
+        initialCpuMove: true,
       };
 
     default:
@@ -100,6 +148,10 @@ function GameProvider({ children }) {
       xScore,
       oScore,
       tieScore,
+      winner,
+      resetPrompt,
+      initialCpuMove,
+      moveNumber,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -116,6 +168,10 @@ function GameProvider({ children }) {
         xScore,
         oScore,
         tieScore,
+        winner,
+        resetPrompt,
+        initialCpuMove,
+        moveNumber,
         dispatch,
       }}
     >
