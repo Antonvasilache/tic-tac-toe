@@ -13,6 +13,8 @@ function GameBoard() {
     moveNumber,
   } = useGame();
 
+  console.log(gameboard);
+
   function handleMove(e, index) {
     //dispatch will add a mark(playerTurn is "X" or "O") to the gameboard array , at the index corresponding to the clicked tile
     dispatch({ type: "next", payload: { index, playerTurn } });
@@ -99,7 +101,7 @@ function GameBoard() {
     <div className="gameboard">
       {gameboard.map((item, index) => (
         <div
-          className="gameboard-item"
+          className={`gameboard-item ${item ? `item-disabled-${item}` : ""}`}
           key={index}
           onClick={(e) => handleMove(e, index)}
         >

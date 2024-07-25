@@ -2,6 +2,30 @@ import { createContext, useContext, useReducer } from "react";
 
 const GameContext = createContext();
 
+function saveStateToLocalStorage(state) {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem("ticTacToeState", serializedState);
+  } catch (err) {
+    console.error("Could not save state", err);
+  }
+}
+
+function loadStateFromLocalStorage() {
+  try {
+    const serializedState = localStorage.getItem("ticTacToeState");
+
+    if (!serializedState) return undefined;
+
+    return JSON.parse(serializedState);
+  } catch (err) {
+    console.error("Could not save state", err);
+    return undefined;
+  }
+}
+
+const savedState = loadStateFromLocalStorage();
+
 const initialState = {
   status: "ready",
   player1Mark: "O",
@@ -17,6 +41,8 @@ const initialState = {
   initialCpuMove: false,
   moveNumber: 0,
 };
+
+const loadedState = savedState || initialState;
 
 //checks if the current gameboard state matches any of the win conditions for Tic Tac Toe
 function checkWinCondition(gameboard) {
@@ -51,23 +77,27 @@ function checkWinCondition(gameboard) {
 }
 
 function reducer(state, action) {
+  let newState;
+
   switch (action.type) {
     //selecting player 1's mark
     case "mark":
-      return {
+      newState = {
         ...state,
         player1Mark: action.payload,
         player2Mark: action.payload === "X" ? "O" : "X",
       };
+      break;
 
     //starting the game
     case "start":
-      return {
+      newState = {
         ...state,
         status: "active",
         gameType: action.payload,
         playerTurn: "X",
       };
+      break;
 
     //next turn
     case "next":
@@ -83,7 +113,7 @@ function reducer(state, action) {
       );
       //checking and storing win condition after every turn
       const winResult = checkWinCondition(newGameboard);
-      return {
+      newState = {
         ...state,
         playerTurn: state.playerTurn === "X" ? "O" : "X",
         gameboard: newGameboard,
@@ -93,6 +123,7 @@ function reducer(state, action) {
         winner: winResult ? winResult : null,
         moveNumber: state.moveNumber + 1,
       };
+      break;
 
     //showing reset game modal
     case "reset-prompt":
@@ -103,15 +134,16 @@ function reducer(state, action) {
 
     //resetting the game
     case "reset":
-      return {
+      newState = {
         ...initialState,
         player1Mark: state.player1Mark,
         player2Mark: state.player2Mark,
       };
+      break;
 
     //starting next round, after a win condition was met
     case "next-round":
-      return {
+      newState = {
         ...state,
         playerTurn:
           state.player1Mark === "O"
@@ -123,17 +155,22 @@ function reducer(state, action) {
         winner: null,
         initialCpuMove: false,
       };
+      break;
 
     //flagging that cpu made the first move
     case "initial-cpu-move":
-      return {
+      newState = {
         ...state,
         initialCpuMove: true,
       };
+      break;
 
     default:
       throw new Error("unkown action");
   }
+
+  saveStateToLocalStorage(newState);
+  return newState;
 }
 
 function GameProvider({ children }) {
@@ -154,7 +191,7 @@ function GameProvider({ children }) {
       moveNumber,
     },
     dispatch,
-  ] = useReducer(reducer, initialState);
+  ] = useReducer(reducer, loadedState);
 
   return (
     <GameContext.Provider
