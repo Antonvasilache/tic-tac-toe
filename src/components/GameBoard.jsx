@@ -108,9 +108,10 @@ function GameBoard() {
           <svg
             width="64"
             height="64"
+            viewBox="0 0 64 64"
             xmlns="http://www.w3.org/2000/svg"
             className={`gameboard-x-outline ${
-              playerTurn === "X" ? "x-active" : ""
+              playerTurn === "X" && !winner ? "x-active" : ""
             }`}
           >
             <path
@@ -123,9 +124,10 @@ function GameBoard() {
           <svg
             width="66"
             height="66"
+            viewBox="0 0 66 66"
             xmlns="http://www.w3.org/2000/svg"
             className={`gameboard-o-outline ${
-              playerTurn === "O" ? "o-active" : ""
+              playerTurn === "O" && !winner ? "o-active" : ""
             }`}
           >
             <path
