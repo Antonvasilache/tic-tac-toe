@@ -19,7 +19,7 @@ function App() {
     <div className="app-container">
       <ModalEnd />
       <ModalReset />
-      <div className="app">
+      <main className="app">
         {status === "ready" && (
           <NewGameMenu>
             <Logo />
@@ -34,7 +34,7 @@ function App() {
             <Highscore />
           </Game>
         )}
-      </div>
+      </main>
     </div>
   );
 }
